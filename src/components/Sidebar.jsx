@@ -37,7 +37,7 @@ export default function Sidebar({onSearch, loading, resultCount}){
             newErrors.endtime = "Date range cannot exceed 30 days";
         }
        }   
-        
+
         const mag = parseFloat(filters.minmagnitude);
         if(isNaN(mag) || mag < 0 || mag > 10){
             newErrors.minmagnitude = "Minimum magnitude must be a number between 0 and 10";
@@ -58,7 +58,7 @@ export default function Sidebar({onSearch, loading, resultCount}){
     return (
         <aside className={`sidebar ${isOpen ? "open" : ""}`}>
            <div className="sidebar-header">
-            <h1> EagleView Seismic</h1>
+            <h1>🌎 EagleView Seismic</h1>
             <button className="sidebar-toggle"
             onClick={() => setIsOpen(prev => !prev)}
             aria-label="Toggle filters"

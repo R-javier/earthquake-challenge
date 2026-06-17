@@ -17,10 +17,18 @@ function createCircle(mag) {
 
 function createPopup(place, mag, time) {
   const date = new Date(time).toLocaleString("en-US");
+  const magClass = mag >= 7 ? "mag-high" : mag >= 5 ? "mag-mid" : "mag-low";
+
   return new maplibregl.Popup().setHTML(`
-    <b>${place || "Unknown location"}</b><br/>
-    Magnitude: ${mag?.toFixed(1)}<br/>
-    Date: ${date}
+    <div class="popup-place">${place || "Unknown Location"}</div>
+    <div class="popup-row">
+      <span>Magnitude:</span>
+      <span class="popup-value ${magClass}">${mag?.toFixed(1) || "N/A"}</span>
+    </div>
+    <div class="popup-row">
+      <span>Date:</span>
+      <span class="popup-value">${date}</span>
+    </div>
   `);
 }
 
@@ -29,7 +37,14 @@ export default function Map({ earthquakes, loading, error }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const markers = useRef([]);
-
+  const maxMagnitude =
+    earthquakes.length > 0
+      ? Math.max(
+        ...earthquakes.map(
+          (earthquake) => earthquake.properties.mag || 0
+        )
+      ).toFixed(1)
+      : "-";
 
   useEffect(() => {
     map.current = new maplibregl.Map({
@@ -65,6 +80,18 @@ export default function Map({ earthquakes, loading, error }) {
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <div ref={mapContainer} style={{ width: "100%", height: "100%" }} />
 
+      <div className="map-stats">
+        <div className="stat-row">
+          <span>🌎 Earthquakes</span>
+          <strong>{earthquakes.length}</strong>
+        </div>
+
+        <div className="stat-row">
+          <span>📈 Max Mag</span>
+          <strong>{maxMagnitude}</strong>
+        </div>
+      </div>
+
       {loading && (
         <div className="map-overlay">
           <div className="spinner" />
@@ -86,6 +113,26 @@ export default function Map({ earthquakes, loading, error }) {
           <p className="overlay-sub">Try a wider date range or lower magnitude.</p>
         </div>
       )}
+
+      <div className="map-legend">
+        <h4>Magnitude</h4>
+
+        <div className="legend-item">
+          <span className="legend-dot low"></span>
+          <span>4 - 5</span>
+        </div>
+
+        <div className="legend-item">
+          <span className="legend-dot mid"></span>
+          <span>5 - 7</span>
+        </div>
+
+        <div className="legend-item">
+          <span className="legend-dot high"></span>
+          <span>7+</span>
+        </div>
+      </div>
     </div>
+
   );
 }
