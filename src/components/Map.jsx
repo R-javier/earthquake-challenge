@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-
 function createCircle(mag) {
   const el = document.createElement("div");
   el.style.width = Math.max(8, mag * 5) + "px";
@@ -32,7 +31,6 @@ function createPopup(place, mag, time) {
   `);
 }
 
-
 export default function Map({ earthquakes, loading, error }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -40,10 +38,8 @@ export default function Map({ earthquakes, loading, error }) {
   const maxMagnitude =
     earthquakes.length > 0
       ? Math.max(
-        ...earthquakes.map(
-          (earthquake) => earthquake.properties.mag || 0
-        )
-      ).toFixed(1)
+          ...earthquakes.map((earthquake) => earthquake.properties.mag || 0),
+        ).toFixed(1)
       : "-";
 
   useEffect(() => {
@@ -110,7 +106,9 @@ export default function Map({ earthquakes, loading, error }) {
       {!loading && !error && earthquakes.length === 0 && (
         <div className="map-overlay">
           <p className="overlay-title">No results</p>
-          <p className="overlay-sub">Try a wider date range or lower magnitude.</p>
+          <p className="overlay-sub">
+            Try a wider date range or lower magnitude.
+          </p>
         </div>
       )}
 
@@ -133,6 +131,5 @@ export default function Map({ earthquakes, loading, error }) {
         </div>
       </div>
     </div>
-
   );
 }
