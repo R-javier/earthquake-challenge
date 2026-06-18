@@ -345,32 +345,6 @@ body,
 .mag-mid  { background: #fdf3e2; color: #b7791f; }
 .mag-high { background: #fde8e8; color: #c53030; }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .app-layout {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    min-width: unset;
-    max-height: 56px;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-  }
-
-  .sidebar.open {
-    max-height: 80vh;
-  }
-
-  .sidebar-toggle {
-    display: block;
-  }
-
-  .map-container {
-    flex: 1;
-  }
-}
 
 /* ===== MAP STATS ===== */
 
@@ -403,3 +377,73 @@ body,
 .stat-row:last-child {
   margin-bottom: 0;
 }
+
+/* ===== FORM HEADER CON TOGGLE ===== */
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.form-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.form-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-arrow {
+  font-size: 18px;
+  color: #8a8a8a;
+  transition: transform 0.25s ease;
+  display: inline-block;
+}
+
+.toggle-arrow.open {
+  transform: rotate(90deg);
+}
+
+.form-toggle:hover .toggle-arrow {
+  color: #4a6cf7;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    max-height: 56px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .sidebar.open {
+    max-height: 80vh;
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .map-container {
+    flex: 1;
+  }
+}
+

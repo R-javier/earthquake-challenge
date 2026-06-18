@@ -10,6 +10,7 @@ export default function Sidebar({onSearch, loading, resultCount}){
     const [filters, setFilters] = useState(DEFAULT_FILTERS);
     const [errors, setErrors] = useState({});
     const [isOpen, setIsOpen] = useState(false);
+    const [isFormOpen, setIsFormOpen] = useState(true);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -21,11 +22,9 @@ export default function Sidebar({onSearch, loading, resultCount}){
 
     const validate = () => {
         const newErrors = {};
-
         if(!filters.starttime) newErrors.starttime = "Start time is required";
         if(!filters.endtime) newErrors.endtime = "End time is required";
-
-       if(filters.starttime && filters.endtime){
+        if(filters.starttime && filters.endtime){
         if(filters.starttime > filters.endtime){
             newErrors.endtime = "End time must be after start date";
         }
@@ -68,8 +67,20 @@ export default function Sidebar({onSearch, loading, resultCount}){
            </div>
 
            <div className="sidebar-body">
-            <form className="filter-form" onSubmit={handleSubmit} noValidate>
-                
+
+            <div className="form-header">
+              <h2>Filters</h2>
+              <button
+                className="form-toggle"
+                onClick={() => setIsFormOpen(!isFormOpen)}
+                aria-label="Toggle filter form"
+              >
+              <span className={`toggle-arrow ${isFormOpen ? "open" : ""}`}>→</span>
+              </button>
+            </div>
+
+            {isFormOpen && (
+            <form className="filter-form" onSubmit={handleSubmit} noValidate> 
              <div className="form-group">
               <label htmlFor="starttime">Start Time</label>
               <input
@@ -93,7 +104,7 @@ export default function Sidebar({onSearch, loading, resultCount}){
               />
               {errors.endtime && <span className="field-error">{errors.endtime}</span>}
              </div>
-
+ 
              <div className="form-group">
               <label htmlFor="minmagnitude">Minimum Magnitude</label>
               <input
@@ -113,6 +124,7 @@ export default function Sidebar({onSearch, loading, resultCount}){
                 {loading ? "Searching..." : "Search for Earthquakes"}
              </button>
             </form>
+            )}
 
             {resultCount !== undefined && (
                 <div className="results-info">
