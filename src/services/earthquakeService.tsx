@@ -1,5 +1,7 @@
-export async function getEarthquakes({ starttime, endtime, minmagnitude }) {
-  const cacheKey = `quakes_${starttime}_${endtime}_${minmagnitude}`;
+import type { Earthquake, Filters } from "../types";
+
+export async function getEarthquakes(filters: Filters): Promise<Earthquake[]> {
+  const cacheKey = `quakes_${filters.starttime}_${filters.endtime}_${filters.minmagnitude}`;
 
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
@@ -9,10 +11,10 @@ export async function getEarthquakes({ starttime, endtime, minmagnitude }) {
 
   const params = new URLSearchParams({
     format: "geojson",
-    starttime,
-    endtime,
-    minmagnitude,
-    limit: 100,
+    starttime: filters.starttime,
+    endtime: filters.endtime,
+    minmagnitude: filters.minmagnitude,
+    limit: "100",
   });
 
   const res = await fetch(

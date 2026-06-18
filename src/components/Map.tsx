@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
+import type { Earthquake } from "../types";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-function createCircle(mag) {
+function createCircle(mag: number): HTMLDivElement {
   const el = document.createElement("div");
   el.style.width = Math.max(8, mag * 5) + "px";
   el.style.height = Math.max(8, mag * 5) + "px";
@@ -14,7 +15,11 @@ function createCircle(mag) {
   return el;
 }
 
-function createPopup(place, mag, time) {
+function createPopup(
+  place: string,
+  mag: number,
+  time: number,
+): maplibregl.Popup {
   const date = new Date(time).toLocaleString("en-US");
   const magClass = mag >= 7 ? "mag-high" : mag >= 5 ? "mag-mid" : "mag-low";
 
@@ -31,10 +36,18 @@ function createPopup(place, mag, time) {
   `);
 }
 
-export default function Map({ earthquakes, loading, error }) {
-  const mapContainer = useRef(null);
-  const map = useRef(null);
-  const markers = useRef([]);
+export default function Map({
+  earthquakes,
+  loading,
+  error,
+}: {
+  earthquakes: Earthquake[];
+  loading: boolean;
+  error?: string;
+}) {
+  const mapContainer = useRef<HTMLDivElement | null>(null);
+  const map = useRef<maplibregl.Map | null>(null);
+  const markers = useRef<maplibregl.Marker[]>([]);
   const maxMagnitude =
     earthquakes.length > 0
       ? Math.max(
@@ -43,6 +56,8 @@ export default function Map({ earthquakes, loading, error }) {
       : "-";
 
   useEffect(() => {
+    if (!mapContainer.current) return;
+
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: "https://tiles.openfreemap.org/styles/liberty",
@@ -50,7 +65,7 @@ export default function Map({ earthquakes, loading, error }) {
       zoom: 2,
     });
     map.current.addControl(new maplibregl.NavigationControl());
-    return () => map.current.remove();
+    return () => map.current?.remove();
   }, []);
 
   useEffect(() => {
@@ -66,7 +81,7 @@ export default function Map({ earthquakes, loading, error }) {
       const marker = new maplibregl.Marker({ element: createCircle(mag) })
         .setLngLat([lng, lat])
         .setPopup(createPopup(place, mag, time))
-        .addTo(map.current);
+        .addTo(map.current!);
 
       markers.current.push(marker);
     });

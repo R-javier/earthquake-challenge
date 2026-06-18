@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, type FormEvent, type ChangeEvent } from "react";
+import type { Filters } from "../types";
 
 const DEFAULT_FILTERS = {
   starttime: "2024-01-01",
@@ -6,13 +7,23 @@ const DEFAULT_FILTERS = {
   minmagnitude: "4",
 };
 
-export default function Sidebar({ onSearch, loading, resultCount }) {
-  const [filters, setFilters] = useState(DEFAULT_FILTERS);
-  const [errors, setErrors] = useState({});
-  const [isOpen, setIsOpen] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(true);
+interface SidebarProps {
+  onSearch: (filters: Filters) => void;
+  loading: boolean;
+  resultCount?: number;
+}
 
-  const handleChange = (e) => {
+export default function Sidebar({
+  onSearch,
+  loading,
+  resultCount,
+}: SidebarProps) {
+  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(true);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
@@ -20,8 +31,8 @@ export default function Sidebar({ onSearch, loading, resultCount }) {
     }
   };
 
-  const validate = () => {
-    const newErrors = {};
+  const validate = (): Record<string, string> => {
+    const newErrors: Record<string, string> = {};
     if (!filters.starttime) newErrors.starttime = "Start time is required";
     if (!filters.endtime) newErrors.endtime = "End time is required";
     if (filters.starttime && filters.endtime) {
@@ -31,7 +42,7 @@ export default function Sidebar({ onSearch, loading, resultCount }) {
 
       const start = new Date(filters.starttime);
       const end = new Date(filters.endtime);
-      const days = (end - start) / (1000 * 60 * 60 * 24);
+      const days = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
       if (days > 30) {
         newErrors.endtime = "Date range cannot exceed 30 days";
       }
@@ -45,7 +56,7 @@ export default function Sidebar({ onSearch, loading, resultCount }) {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
