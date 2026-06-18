@@ -139,9 +139,8 @@ body,
 /* ===== BOTÓN ===== */
 .btn-search {
   padding: 13px;
-  background: #d3d6da;
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
-  color: white;
+  background: #c8c8c8be;
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   font-size: 15px;
@@ -153,13 +152,13 @@ body,
     background 0.2s,
     opacity 0.2s;
   margin-top: 6px;
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .btn-search:hover:not(:disabled) {
-  background: #3d5ce0;
-  box-shadow: 0 12px 24px rgba(59, 130, 246, 0.35);
-  transform: translateY(-2px);
+  background: #b0b0b0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 .btn-search:active:not(:disabled) {
