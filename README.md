@@ -4,7 +4,7 @@ A web app that displays earthquake data on an interactive map with a filterable 
 
 ## Tech stack
 
-React + Vite, MapLibre GL JS, OpenFreeMap tiles, plain CSS (no UI framework).
+React + TypeScript + Vite, MapLibre GL JS, OpenFreeMap tiles, plain CSS (no UI framework).
 
 ## Run locally
 
